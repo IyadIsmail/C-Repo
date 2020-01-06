@@ -1,0 +1,32 @@
+using System;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
+	
+public class Program
+{
+	public static void Main()
+	{
+		String url="https://raw.githubusercontent.com/bungard/PalindromeTest/master/string.json";
+		try
+		{
+			System.Net.WebClient client=new System.Net.WebClient();
+			String json = client.DownloadString(url);		
+			var jsonData = JsonConvert.DeserializeObject<dynamic>(json);
+			foreach (var i in jsonData.strings)
+			{
+				var str = Regex.Replace(i.str.ToString(), "[^0-9a-zA-Z]+", "", RegexOptions.Compiled).ToLower(); //Remove special characters and make the string in lower case
+				var revs = "";
+				for (int j = str.Length - 1; j >= 0; j--) //String Reverse
+            		revs += str[j].ToString();
+				if (revs == str) // Checking whether string is palindrome or not
+            		Console.WriteLine("String : " + i.str.ToString() + " is Palindrome.");
+        		else
+            		Console.WriteLine("String : " + i.str.ToString() + " is not Palindrome.");
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine("File not found");
+		}	
+	}
+}
